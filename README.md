@@ -1,1 +1,195 @@
-# askoyunoynama
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Benimle Oyun Oynar mısın? 💘</title>
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: pink;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial;
+    overflow: hidden;
+}
+
+.container {
+    text-align: center;
+    z-index: 2;
+}
+
+#startText {
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: black;
+}
+
+.buttons {
+    margin-top: 30px;
+    position: relative;
+}
+
+button {
+    padding: 15px 30px;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#yes {
+    background: green;
+    color: white;
+}
+
+#no {
+    background: red;
+    color: white;
+    position: absolute;
+}
+
+/* Kalpler */
+.heart {
+    position: fixed;
+    top: -20px;
+    font-size: 20px;
+    animation: fall linear forwards;
+    z-index: 1;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh);
+    }
+}
+
+/* Konfeti */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    top: 0;
+    animation: confettiFall 3s linear forwards;
+}
+
+@keyframes confettiFall {
+    to {
+        transform: translateY(100vh) rotate(720deg);
+    }
+}
+
+/* Evet yazısı */
+#yesText {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 60px;
+    color: white;
+    z-index: 3;
+    text-shadow: 2px 2px 8px #000;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div id="startText">Benimle Akşam Oyun Oynar mısın Aşkım? ❤️</div>
+    <div class="buttons">
+        <button id="yes">Evet 💖</button>
+        <button id="no">Hayır ❌</button>
+    </div>
+</div>
+
+<script>
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const startText = document.getElementById("startText");
+
+let yesScale = 1;
+let noScale = 1;
+
+/* Hayır Kaçma */
+function moveNoButton() {
+    const maxX = window.innerWidth - noBtn.offsetWidth;
+    const maxY = window.innerHeight - noBtn.offsetHeight;
+
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top = Math.random() * maxY + "px";
+
+    yesScale += 0.3;
+    yesBtn.style.transform = `scale(${yesScale})`;
+
+    noScale -= 0.1;
+    if (noScale <= 0.2) {
+        noBtn.style.display = "none";
+    } else {
+        noBtn.style.transform = `scale(${noScale})`;
+    }
+
+    if (yesScale >= 6) {
+        yesBtn.style.position = "fixed";
+        yesBtn.style.left = "0";
+        yesBtn.style.top = "0";
+        yesBtn.style.width = "100vw";
+        yesBtn.style.height = "100vh";
+        yesBtn.style.borderRadius = "0";
+        yesBtn.style.fontSize = "60px";
+    }
+}
+
+noBtn.addEventListener("mouseover", moveNoButton);
+
+/* Kalp Yağmuru */
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+    heart.style.fontSize = (Math.random() * 20 + 15) + "px";
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 5000);
+}
+
+setInterval(createHeart, 300);
+
+/* Konfeti Efekti */
+function createConfetti() {
+    for (let i = 0; i < 150; i++) {
+        const confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.backgroundColor = 
+            `hsl(${Math.random() * 360}, 100%, 50%)`;
+        confetti.style.animationDuration = (Math.random() * 3 + 2) + "s";
+        document.body.appendChild(confetti);
+
+        setTimeout(() => confetti.remove(), 4000);
+    }
+}
+
+/* Evet’e basınca */
+yesBtn.addEventListener("click", () => {
+    // Başlangıç yazısını gizle
+    startText.style.display = "none";
+
+    // Konfeti ve “Biliyordum!” yazısı
+    createConfetti();
+
+    if (!document.getElementById("yesText")) {
+        const yesText = document.createElement("div");
+        yesText.id = "yesText";
+        yesText.textContent = "💖 Biliyordum! 💖";
+        document.body.appendChild(yesText);
+    }
+});
+</script>
+
+</body>
+</html>
